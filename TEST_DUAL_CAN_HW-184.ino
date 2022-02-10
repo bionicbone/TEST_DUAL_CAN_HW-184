@@ -49,6 +49,9 @@ void setup()
 
   pinMode(CAN1_INT, INPUT);                            // Configuring pin for /INT input
   
+  //SPI.setClockDivider(SPI_CLOCK_DIV4);         // Set SPI to run at 4MHz (8MHz / 2 = 4 MHz)
+                                                  //SPI_CLOCK_DIV2 would be used for 8MHz (16MHz / 2 = 8 MHz)
+
   
   Serial.println("MCP2515 Library Receive Example...");
 }
@@ -104,9 +107,7 @@ void loop()
       }
     }
 
-    //SPI.setClockDivider(SPI_CLOCK_DIV4);         // Set SPI to run at 4MHz (8MHz / 2 = 4 MHz)
-                                                  //SPI_CLOCK_DIV2 would be used for 8MHz (16MHz / 2 = 8 MHz)
-
+ 
     Serial.println();
   }
 
