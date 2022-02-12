@@ -15,6 +15,12 @@ For CAN1 the CS and INT pins were just randomly chosen, I may need to do more re
 
 I did manage to add an Adafruit SD Card breakout, however I found that trying to log data at 1 frame every 4ms was impossible by a long margin, maybe I need to investigate further.
 
-It should be noted the the USB serial needs to be capable of at least 250kb/s (250000b/s), otherwise date will be missed when using the Visual Studio COM window. It maybe necessary to write a VB code so that the data comes over without displaying in the scroll windows which is a significant overhead and unnecessary when logging data. For the time being I am using the built in Visual Studio logging function. 
+It should be noted the the USB serial needs to be capable of at least 250kb/s (250000b/s), otherwise data will be lost when using the Visual Studio COM window. It maybe necessary to write a VB code so that the data comes over without displaying in the scroll window which causes a significant overhead and unnecessary when only wanting to log data. For the time being I am using the built in Visual Studio logging function from the COM window. 
 
-CAN1 has been changed to 125kb/s, next step is to build another CAN Sender and attach both to make sure the ESP32 can keep up using the single SPI interface, essenially we will double the frames on the bus to one every 2ms.
+[B]Next Steps:[/B]
+
+CAN0 remains at 500kb/s, but CAN1 has been changed to 125kb/s.
+
+Build another CAN Sender running at 125kb/s sending a frame every 4ms and attach both to make sure the ESP32
+
+Check the ESP32 keep up using the single SPI interface, essenially we will double the frames on the bus to one every 2ms.
