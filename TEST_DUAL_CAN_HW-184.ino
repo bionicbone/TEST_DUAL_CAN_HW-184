@@ -10,10 +10,8 @@
 #include <mcp_can.h>
 #include <SPI.h>
 
-long unsigned int rxId;
-unsigned char len = 0;
-unsigned char rxBuf[8];
-char msgString[128];                            // Array to store serial string
+
+
 unsigned long upTimer = millis();
 
 #define CAN0_INT 16                             // Set INT to pin 16
@@ -68,9 +66,12 @@ void loop()
 
 
 void readCan(MCP_CAN myCan, uint8_t MCP2515number) {
-
   //Serial.println(micros() - timer1);
 
+  long unsigned int rxId;
+  unsigned char len = 0;
+  unsigned char rxBuf[8];
+  char msgString[128];                            // Array to store serial string
   myCan.readMsgBuf(&rxId, &len, rxBuf);      // Read data: rxId = Frame ID, len = data length, buf = data byte(s)
 
   if ((rxId & 0x80000000) == 0x80000000)     // Determine if ID is standard (11 bits) or extended (29 bits)
