@@ -4,9 +4,15 @@
  Author:	Micro
 */
 
-// CAN Receive Example
-//
+// Add SD Card
+//#include <sd_diskio.h>
+//#include <sd_defines.h>
+//#include <vfs_api.h>
+//#include <FSImpl.h>
+#include "FS.h"
+#include "SD.h"
 
+// CAN Receive Example
 #include <mcp_can.h>
 #include <SPI.h>
 
@@ -16,18 +22,72 @@ unsigned char rxBuf[8];
 char msgString[128];                        // Array to store serial string
 unsigned long timer0 = micros();
 unsigned long timer1 = micros();
+int sdCounter = 0;
+
 
 #define CAN0_INT 16                             // Set INT to pin 16
-MCP_CAN CAN0(5);                               // Set CS to pin 10
+MCP_CAN CAN0(22);                               // Set CS to pin 10
 
 // Add 2nd Can Module
 #define CAN1_INT 3                              // Set INT to pin 2
 MCP_CAN CAN1(17);                               // Set CS to pin 10
 
 
+// Add SD Card
+void writeFile(fs::FS& fs, const char* path, const char* message) {
+  Serial.printf("Writing file: %s\n", path);
+
+  File file = fs.open(path, FILE_WRITE);
+  if (!file) {
+    Serial.println("Failed to open file for writing");
+    return;
+  }
+  if (file.print(message)) {
+    Serial.println("File written");
+  }
+  else {
+    Serial.println("Write failed");
+  }
+  file.close();
+}
+
+void appendFile(fs::FS& fs, const char* path, const char* message) {
+  Serial.printf("Appending to file: %s\n", path);
+
+  File file = fs.open(path, FILE_APPEND);
+  if (!file) {
+    Serial.println("Failed to open file for appending");
+    return;
+  }
+  if (file.print(message)) {
+    Serial.println("Message appended");
+  }
+  else {
+    Serial.println("Append failed");
+  }
+  file.close();
+}
+
+void readFile(fs::FS& fs, const char* path) {
+  Serial.printf("Reading file: %s\n", path);
+
+  File file = fs.open(path);
+  if (!file) {
+    Serial.println("Failed to open file for reading");
+    return;
+  }
+
+  Serial.print("Read from file: ");
+  while (file.available()) {
+    Serial.write(file.read());
+  }
+  file.close();
+}
+
+
 void setup()
 {
-  Serial.begin(250000);
+  Serial.begin(115200);
 
   // Initialize MCP2515 running at 16MHz with a baudrate of 500kb/s and the masks and filters disabled.
   if (CAN0.begin(MCP_ANY, CAN_500KBPS, MCP_8MHZ) == CAN_OK)
@@ -56,6 +116,40 @@ void setup()
 
   
   Serial.println("MCP2515 Library Receive Example...");
+
+  // Add SD Card
+  if (!SD.begin(5)) {
+    Serial.println("Card Mount Failed");
+    //return;
+  }
+  uint8_t cardType = SD.cardType();
+
+  if (cardType == CARD_NONE) {
+    Serial.println("No SD card attached");
+    //return;
+  }
+
+  Serial.print("SD Card Type: ");
+  if (cardType == CARD_MMC) {
+    Serial.println("MMC");
+  }
+  else if (cardType == CARD_SD) {
+    Serial.println("SDSC");
+  }
+  else if (cardType == CARD_SDHC) {
+    Serial.println("SDHC");
+  }
+  else {
+    Serial.println("UNKNOWN");
+  }
+
+  uint64_t cardSize = SD.cardSize() / (1024 * 1024);
+  Serial.printf("SD Card Size: %lluMB\n", cardSize);
+  
+  Serial.println("");
+
+  writeFile(SD, "/OBD2.txt", "Header");
+
 }
 
 void loop()
@@ -71,20 +165,30 @@ void loop()
     else
       sprintf(msgString, "CAN0: Standard ID: 0x%.3lX       DLC: %1d  Data:", rxId, len);
 
-    Serial.print(msgString);
+    //Serial.print(msgString);
+    appendFile(SD, "/OBD2.txt", msgString);
 
     if ((rxId & 0x40000000) == 0x40000000) {    // Determine if message is a remote request frame.
       sprintf(msgString, " REMOTE REQUEST FRAME");
-      Serial.print(msgString);
+      //Serial.print(msgString);
+      appendFile(SD, "/OBD2.txt", msgString);
     }
     else {
       for (byte i = 0; i < len; i++) {
         sprintf(msgString, " 0x%.2X", rxBuf[i]);
-        Serial.print(msgString);
+        //Serial.print(msgString);
+        appendFile(SD, "/OBD2.txt", msgString);
       }
     }
 
-    Serial.println();
+    //Serial.println();
+    appendFile(SD, "/OBD2.txt", "\n");
+    sdCounter++;
+    if (sdCounter > 10) {
+      Serial.println("STOP");
+      readFile(SD, "/OBD2.txt");
+      while (1);
+    }
 
     timer0 = micros();
   }
