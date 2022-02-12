@@ -17,7 +17,7 @@ I did manage to add an Adafruit SD Card breakout, however I found that trying to
 
 It should be noted the the USB serial needs to be capable of at least 250kb/s (250000b/s), otherwise data will be lost when using the Visual Studio COM window. It maybe necessary to write a VB code so that the data comes over without displaying in the scroll window which causes a significant overhead and unnecessary when only wanting to log data. For the time being I am using the built in Visual Studio logging function from the COM window. 
 
-[B]Next Steps:[/B]
+Next Steps:
 
 CAN0 remains at 500kb/s, but CAN1 has been changed to 125kb/s.
 
