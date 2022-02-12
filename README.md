@@ -25,6 +25,8 @@ CAN0 remains at 500kb/s, but CAN1 has been changed to 125kb/s.
 
 Build another CAN Sender running at 125kb/s sending a frame every 4ms and attach both to make sure the ESP32
 
+Calculating the Time Quantum on the MCP2515 then a 32Mhz Crystal would be better for the 500kb/s (2us bit time), while 8Mhz was best for the 125kb/s (8us bit time). Do bit registers need altering ?
+
 Check the ESP32 keep up using the single SPI interface, essenially we will double the frames on the bus to one every 2ms.
 
 Check the captured data layout is compatible with a SavvyCan import type, I may need to alter slightly before I capture too much data
