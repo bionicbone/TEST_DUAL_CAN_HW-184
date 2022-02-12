@@ -14,8 +14,10 @@ long unsigned int rxId;
 unsigned char len = 0;
 unsigned char rxBuf[8];
 char msgString[128];                        // Array to store serial string
+unsigned long timer0 = micros();
+unsigned long timer1 = micros();
 
-#define CAN0_INT 2                              // Set INT to pin 2
+#define CAN0_INT 16                             // Set INT to pin 16
 MCP_CAN CAN0(5);                               // Set CS to pin 10
 
 // Add 2nd Can Module
@@ -25,7 +27,7 @@ MCP_CAN CAN1(17);                               // Set CS to pin 10
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(250000);
 
   // Initialize MCP2515 running at 16MHz with a baudrate of 500kb/s and the masks and filters disabled.
   if (CAN0.begin(MCP_ANY, CAN_500KBPS, MCP_8MHZ) == CAN_OK)
@@ -60,6 +62,8 @@ void loop()
 {
   if (!digitalRead(CAN0_INT))                         // If CAN0_INT pin is low, read receive buffer
   {
+    Serial.println(micros() - timer0);
+
     CAN0.readMsgBuf(&rxId, &len, rxBuf);      // Read data: len = data length, buf = data byte(s)
 
     if ((rxId & 0x80000000) == 0x80000000)     // Determine if ID is standard (11 bits) or extended (29 bits)
@@ -81,12 +85,16 @@ void loop()
     }
 
     Serial.println();
+
+    timer0 = micros();
   }
 
 
   // Add 2nd Can Module
   if (!digitalRead(CAN1_INT))                         // If CAN0_INT pin is low, read receive buffer
   {
+    Serial.println(micros() - timer1);
+
     CAN1.readMsgBuf(&rxId, &len, rxBuf);      // Read data: len = data length, buf = data byte(s)
 
     if ((rxId & 0x80000000) == 0x80000000)     // Determine if ID is standard (11 bits) or extended (29 bits)
@@ -109,6 +117,8 @@ void loop()
 
  
     Serial.println();
+
+    timer1 = micros();
   }
 
 }
