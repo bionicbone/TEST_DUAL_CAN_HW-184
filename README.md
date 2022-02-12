@@ -11,11 +11,13 @@ CAN0: GPIO19 to D0, GPIO23 to D1, GPIO18 to CLK, GPIO22 to CS, GPIO16 to INT
 
 CAN1: GPIO19 to D0, GPIO23 to D1, GPIO18 to CLK, GPI17 to CS, GPIO3 to INT
 
-For CAN1 the CS and INT pins were just randomly chosen, I may need to do more research.
+CS and INT pins were just randomly chosen, I may need to do more research. i.e. GPIO2 caused firmware uploading issues
 
-I did manage to add an Adafruit SD Card breakout, however I found that trying to log data at 1 frame every 4ms was impossible by a long margin, maybe I need to investigate further.
+I did manage to add an Adafruit SD Card breakout, however I found that trying to log data at 1 frame every 4ms was impossible by a long margin, maybe I need to investigate further because SD Card would be much better than having to use the laptop to capture every log.
 
-It should be noted the the USB serial needs to be capable of at least 250kb/s (250000b/s), otherwise data will be lost when using the Visual Studio COM window. It maybe necessary to write a VB code so that the data comes over without displaying in the scroll window which causes a significant overhead and unnecessary when only wanting to log data. For the time being I am using the built in Visual Studio logging function from the COM window. 
+The CAN Bus write module is currently set to send ID 145 every 4ms with an increamenting counter. Using this I was able to detect if any of the frames were lost. It was noted that at the popular 115200 USB baud rate the data was unreliably capture in the the Visual Studio COM window. 250000 baud currently solved the issue although once both buss are running then maybe this will need to be increased further.
+
+It maybe necessary to write a VB code so that the data comes over without displaying in the Visual Studio COM window which causes a significant overhead and unnecessary when only wanting to log data. However, I am using the built in Visual Studio logging function from the Visual Studio COM window, this is a live with for now. 
 
 Next Steps:
 
