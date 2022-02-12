@@ -15,9 +15,9 @@ CS and INT pins were just randomly chosen, I may need to do more research. i.e. 
 
 I did manage to add an Adafruit SD Card breakout, however I found that trying to log data at 1 frame every 4ms was impossible by a long margin, maybe I need to investigate further because SD Card would be much better than having to use the laptop to capture every log.
 
-The CAN Bus write module is currently set to send ID 145 every 4ms with an increamenting counter. Using this I was able to detect if any of the frames were lost. It was noted that at the popular 115200 USB baud rate the data was unreliably capture in the the Visual Studio COM window. 250000 baud currently solved the issue although once both buss are running then maybe this will need to be increased further.
+The CAN Bus write module is currently set to send ID 145 every 4ms with an increamenting counter. Using this I was able to detect if any of the frames were lost. It was noted that at the popular 115200 USB baud rate the data was unreliably captured in the the Visual Studio COM window. 250000 baud currently solves the issue although once both buss are running then this may need to be increased further.
 
-It maybe necessary to write a VB code so that the data comes over without displaying in the Visual Studio COM window which causes a significant overhead and unnecessary when only wanting to log data. However, I am using the built in Visual Studio logging function from the Visual Studio COM window, this is a live with for now. 
+Furthermore, it maybe necessary to write a VB code so that the data comes over without displaying in the Visual Studio COM window which causes a significant overhead and unnecessary when only wanting to log data. However, I am using the built in Visual Studio logging function from the Visual Studio COM window, therefore this is a live with for now. 
 
 Next Steps:
 
