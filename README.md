@@ -1,6 +1,8 @@
 # TEST_DUAL_CAN_HW-184
 LOLIN32 ESP32 with 2 x HW-184 Can Bus Module
 
+Requirement: MCP_CAN_lib-master-1.5.0 library
+
 This appears to be working, but more testing required as I only used one Can bus writer and swapped to each indivdual HW-184 for testing the code. Also both were set to 500kb/s bus speed.
 
 The HW-184 CAN Bus modules must be powered by 5v (I used a NANO powered by USB just to get thh 5v & GND pins in this test)
