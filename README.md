@@ -35,6 +35,8 @@ Data looged needs to be a .CSV file !!!
 
 Check the captured data layout is compatible with a SavvyCan import type, I may need to alter slightly before I capture too much data
 
+Move wire from GPIO3 to GPIO21 on Car Module so that I can flash without needing to disconnect the power.
+
 Calculating the Time Quantum on the MCP2515 then a 32Mhz Crystal would be better for the 500kb/s (2us bit time), while 8Mhz was best for the 125kb/s (8us bit time). Do bit registers need altering ? That said 8Mhz seems to work just fine so far in my bench testing above.
 
 The Land Rover Freelander 2 anaylsis and play back app will need to be updated to detect the CAN0 and CAN1 bus info
