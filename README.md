@@ -36,3 +36,6 @@ Calculating the Time Quantum on the MCP2515 then a 32Mhz Crystal would be better
 Check the captured data layout is compatible with a SavvyCan import type, I may need to alter slightly before I capture too much data
 
 The Land Rover Freelander 2 anaylsis and play back app will need to be updated to detect the CAN0 and CAN1 bus info
+
+Test streaming data to the SD Card using basic code at first with CAN complexity, just to see if it can keep up
+https://github.com/greiman/SerialPort/blob/master/SerialPortLogger/SerialPortLogger.ino
