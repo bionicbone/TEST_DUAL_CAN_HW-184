@@ -5,7 +5,8 @@
 */
 
 // CAN Receive Example
-//
+// Uses the MCP_CAN_lib-master-1.5.0 library
+// https://github.com/coryjfowler/MCP_CAN_lib
 
 #include <mcp_can.h>
 #include <SPI.h>
