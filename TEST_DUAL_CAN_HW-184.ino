@@ -79,7 +79,7 @@ void readCan(MCP_CAN myCan, uint8_t MCP2515number) {
     sprintf(msgString, "CAN%1d: Extended ID: 0x%.8lX  DLC: %1d  Data:", MCP2515number, (rxId & 0x1FFFFFFF), len);
   else
     //sprintf(msgString, "CAN%1d: Standard ID: 0x%.3lX       DLC: %1d  Data:", MCP2515number, rxId, len);
-    sprintf(msgString, "%.8d  %1d  %.3lX  %1d  ",millis()-upTimer , MCP2515number, rxId, len);
+    sprintf(msgString, "%.8d,%1d,%.3lX,0,0,%1d",millis()-upTimer , MCP2515number, rxId, len);
 
   Serial.print(msgString);
 
@@ -89,7 +89,7 @@ void readCan(MCP_CAN myCan, uint8_t MCP2515number) {
   }
   else {
     for (byte i = 0; i < len; i++) {
-      sprintf(msgString, " %.2X", rxBuf[i]);
+      sprintf(msgString, ",%.2X", rxBuf[i]);
       Serial.print(msgString);
     }
   }
