@@ -2,8 +2,9 @@
 LOLIN32 ESP32 with 2 x HW-184 Can Bus Module
 
 Requirement: MCP_CAN_lib-master-1.5.0 library
+https://github.com/coryjfowler/MCP_CAN_lib
 
-This appears to be working, but more testing required as I only used one Can bus writer and swapped to each indivdual HW-184 for testing the code. Also both were set to 500kb/s bus speed.
+This is working, HS bus @ 500kb/s, MS Bus at 125kb/s. Both busses are sending one standard frame every ~4ms.
 
 The HW-184 CAN Bus modules must be powered by 5v (I used a NANO powered by USB just to get thh 5v & GND pins in this test)
 
@@ -17,20 +18,28 @@ CS and INT pins were just randomly chosen, I may need to do more research. i.e. 
 
 I did manage to add an Adafruit SD Card breakout, however I found that trying to log data at 1 frame every 4ms was impossible by a long margin, maybe I need to investigate further because SD Card would be much better than having to use the laptop to capture every log.
 
-The CAN Bus write module is currently set to send ID 145 every 4ms with an increamenting counter. Using this I was able to detect if any of the frames were lost. It was noted that at the popular 115200 USB baud rate the data was unreliably captured in the the Visual Studio COM window. 250000 baud currently solves the issue although once both buss are running then this may need to be increased further.
+The CAN Bus write modules are currently set to send ID 145 & 146 every 4ms with an increamenting counter. Using this I was able to detect if any of the frames were lost. It was noted that at the popular 115200 USB baud rate the data was unreliably captured in the the Visual Studio COM window. 250000 baud currently solves the issue although I may find the car sends data faster than my one frame to process every 2ms.
 
 Furthermore, it maybe necessary to write a VB code so that the data comes over without displaying in the Visual Studio COM window which causes a significant overhead and unnecessary when only wanting to log data. However, I am using the built in Visual Studio logging function from the Visual Studio COM window, therefore this is a live with for now. 
 
+Testing:
+
+![image](https://user-images.githubusercontent.com/7845867/153749063-f127f76e-d1a8-4db5-8971-6d85f0dc9111.png)
+
+![image](https://user-images.githubusercontent.com/7845867/153749020-cd51ae38-fe67-422a-b763-e793f3d51d74.png)
+
+
 Next Steps:
 
-CAN0 remains at 500kb/s, but CAN1 has been changed to 125kb/s.
-
-Build another CAN Sender running at 125kb/s sending a frame every 4ms and attach both to make sure the ESP32
-
-Calculating the Time Quantum on the MCP2515 then a 32Mhz Crystal would be better for the 500kb/s (2us bit time), while 8Mhz was best for the 125kb/s (8us bit time). Do bit registers need altering ?
-
-Check the ESP32 keep up using the single SPI interface, essenially we will double the frames on the bus to one every 2ms.
+Data looged needs to be a .CSV file !!!
 
 Check the captured data layout is compatible with a SavvyCan import type, I may need to alter slightly before I capture too much data
 
+Move wire from GPIO3 to GPIO21 on Car Module so that I can flash without needing to disconnect the power.
+
+Calculating the Time Quantum on the MCP2515 then a 32Mhz Crystal would be better for the 500kb/s (2us bit time), while 8Mhz was best for the 125kb/s (8us bit time). Do bit registers need altering ? That said 8Mhz seems to work just fine so far in my bench testing above.
+
 The Land Rover Freelander 2 anaylsis and play back app will need to be updated to detect the CAN0 and CAN1 bus info
+
+Test streaming data to the SD Card using basic code at first with CAN complexity, just to see if it can keep up
+https://github.com/greiman/SerialPort/blob/master/SerialPortLogger/SerialPortLogger.ino
